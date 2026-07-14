@@ -7,7 +7,7 @@ import { prisma } from "../prisma";
 import { CATEGORIES } from "../categories";
 import type { Category } from "../generated/prisma/client";
 
-const MODEL_NAME = "gemini-2.5-flash";
+const MODEL_NAME = "gemini-flash-latest";
 const MAX_RETRIES = 3;
 const BASE_BACKOFF_MS = 500;
 
