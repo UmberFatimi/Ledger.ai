@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1B2E"/>
+      <stop offset="100%" stop-color="#152238"/>
+    </linearGradient>
+    <linearGradient id="barGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5EEAD4"/>
+      <stop offset="100%" stop-color="#22D3A0"/>
+    </linearGradient>
+    <linearGradient id="barGradDim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5EEAD4" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22D3A0" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="120" fill="url(#bgGrad)"/>
+
+  <!-- Abstract ascending bars (balance / growth / ledger rows) -->
+  <rect x="150" y="286" width="52" height="126" rx="16" fill="url(#barGradDim)"/>
+  <rect x="230" y="228" width="52" height="184" rx="16" fill="url(#barGrad)"/>
+  <rect x="310" y="164" width="52" height="248" rx="16" fill="url(#barGradDim)"/>
+
+  <!-- Orbit ring accent (signals AI / intelligence layer) -->
+  <circle cx="336" cy="150" r="10" fill="#5EEAD4"/>
+</svg>

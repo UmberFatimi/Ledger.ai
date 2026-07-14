@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  account             Account?
+  categoryCorrections CategoryCorrection[]
+}
+
+model Account {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id])
+  // Cache; TransactionEntry rows are the source of truth.
+  balanceCents Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sentTransactions     Transaction[]      @relation("SenderAccount")
+  receivedTransactions Transaction[]      @relation("ReceiverAccount")
+  entries              TransactionEntry[]
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum Category {
+  FOOD_DINING
+  TRANSPORT
+  BILLS
+  SHOPPING
+  ENTERTAINMENT
+  SALARY
+  TRANSFERS
+  OTHER
+}
+
+enum CategorySource {
+  LLM
+  PATTERN_MATCH
+  MANUAL_CORRECTION
+  FALLBACK
+}
+
+model Transaction {
+  id             String            @id @default(cuid())
+  idempotencyKey String            @unique
+  status         TransactionStatus @default(PENDING)
+
+  senderAccountId   String
+  senderAccount     Account @relation("SenderAccount", fields: [senderAccountId], references: [id])
+  receiverAccountId String
+  receiverAccount   Account @relation("ReceiverAccount", fields: [receiverAccountId], references: [id])
+
+  amountCents Int
+  description String
+
+  category       Category?
+  categorySource CategorySource?
+
+  failureReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  entries TransactionEntry[]
+
+  @@index([senderAccountId, createdAt])
+  @@index([receiverAccountId, createdAt])
+}
+
+enum EntryDirection {
+  DEBIT
+  CREDIT
+}
+
+model TransactionEntry {
+  id            String         @id @default(cuid())
+  transactionId String
+  transaction   Transaction    @relation(fields: [transactionId], references: [id])
+  accountId     String
+  account       Account        @relation(fields: [accountId], references: [id])
+  direction     EntryDirection
+  amountCents   Int
+  balanceAfter  Int
+  createdAt     DateTime       @default(now())
+
+  @@index([accountId, createdAt])
+}
+
+model CategoryCorrection {
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id])
+  descriptionPattern String
+  category           Category
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([userId, descriptionPattern])
+  @@index([userId])
+}
