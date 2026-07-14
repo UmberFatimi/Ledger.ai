@@ -63,7 +63,7 @@ export function LoginForm() {
   }
 
   return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="animate-fade-in-up w-full max-w-md rounded-2xl border border-black/10 bg-white/90 p-8 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-zinc-950/90">
           <div className="mb-6 flex flex-col items-center gap-2 text-center">
             <Image src="/ledger-logo.svg" alt="Ledger logo" width={44} height={44} />
